@@ -1,6 +1,8 @@
 package com.example.data.network.di
 
 import com.example.data.network.ApiService
+import com.example.data.repository.GetBlogRepositoryImpl
+import com.example.domain.repository.GetBlogsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +28,11 @@ object DataModule{
     fun provideApiService(retrofit: Retrofit):ApiService{
         return retrofit.create(ApiService::class.java)
 
+    }
+
+    @Provides
+    fun provideGetBlogsRepository(apiService: ApiService):GetBlogsRepository{
+        return GetBlogRepositoryImpl(apiService = apiService)
     }
 
 

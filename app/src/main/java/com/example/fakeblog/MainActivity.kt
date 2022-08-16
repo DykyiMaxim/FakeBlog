@@ -10,6 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.fakeblog.navigation.NavigationItem
+import com.example.fakeblog.presentation.Home.HomeScreen
 import com.example.fakeblog.ui.theme.FakeBlogTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,27 +24,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FakeBlogTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    val navController:NavController = rememberNavController()
+                    app {
+                        NavHost(
+                            navController = navController as NavHostController,
+                            startDestination = NavigationItem.Home.route
+                        ){
+                            composable(NavigationItem.Home.route){
+                                HomeScreen()
+                            }
+
+                        }
+
+                    }
                 }
             }
         }
     }
 }
-
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    FakeBlogTheme {
-        Greeting("Android")
-    }
+fun app(content:@Composable ()->Unit){
+    content()
 }

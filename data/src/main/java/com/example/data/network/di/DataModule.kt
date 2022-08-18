@@ -1,5 +1,6 @@
 package com.example.data.network.di
 
+import com.example.common.Constant
 import com.example.data.network.ApiService
 import com.example.data.repository.GetBlogRepositoryImpl
 import com.example.domain.repository.GetBlogsRepository
@@ -7,6 +8,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -18,10 +21,13 @@ object DataModule{
 @Provides
     fun getRetrofit():Retrofit{
         return Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl(Constant.BASE_URL)
             .addConverterFactory(
                 GsonConverterFactory
                     .create())
+            .client(
+                OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }).build())
             .build()
     }
     @Provides

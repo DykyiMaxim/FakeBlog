@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class GetBlogsUseCase @Inject constructor(private val getBlogsRepository: GetBlogsRepository) {
      operator fun invoke(): Flow<Resource<List<Blog>>> = flow{
-        emit(Resource.Loading(true))
+        emit(Resource.Loading(null))
         try{
             val response = getBlogsRepository.getBlogs()
             emit(Resource.Success(data = response))
@@ -18,6 +18,6 @@ class GetBlogsUseCase @Inject constructor(private val getBlogsRepository: GetBlo
         }catch (e:Exception){
             emit(Resource.Error("Cant Load Blogs"))
         }
-        emit(Resource.Loading(false))
+
     }
 }

@@ -18,7 +18,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fakeblog.navigation.NavigationItem
 import com.example.fakeblog.presentation.Home.HomeScreen
 import com.example.fakeblog.ui.theme.FakeBlogTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +30,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController:NavController = rememberNavController()
-                    app {
+                    val navController= rememberNavController()
+                    Myapp {
                         NavHost(
-                            navController = navController as NavHostController,
+                            navController = navController,
                             startDestination = NavigationItem.Home.route
                         ){
                             composable(NavigationItem.Home.route){
-                                HomeScreen()
+                                HomeScreen(navController = navController)
                             }
 
                         }
@@ -47,6 +49,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun app(content:@Composable ()->Unit){
+fun Myapp(content:@Composable ()->Unit){
     content()
 }

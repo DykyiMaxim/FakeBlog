@@ -1,12 +1,16 @@
 package com.example.data.network.di
 
+import android.content.Context
 import com.example.common.Constant
+import com.example.data.local.BlogDB
+import com.example.data.local.BlogDao
 import com.example.data.network.ApiService
 import com.example.data.repository.GetBlogRepositoryImpl
 import com.example.domain.repository.GetBlogsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,6 +43,16 @@ object DataModule{
     @Provides
     fun provideGetBlogsRepository(apiService: ApiService):GetBlogsRepository{
         return GetBlogRepositoryImpl(apiService = apiService)
+    }
+
+    @Provides
+    fun provideDataBase(@ApplicationContext context:Context):BlogDB{
+        return BlogDB.getInstance(context)
+    }
+
+    @Provides
+    fun provideDAO(blogDB: BlogDB):BlogDao{
+        return blogDB.getBlogDAO()
     }
 
 

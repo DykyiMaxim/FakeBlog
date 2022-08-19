@@ -2,6 +2,7 @@ package com.example.fakeblog.presentation.Home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,8 +35,11 @@ fun HomeScreen(
 
     if(homeState.isLoading)
     {
-        Box(modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator()
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = Color.Cyan)
             
         }
     }
@@ -60,7 +64,7 @@ fun PostItem(it:Blog){
     Card(
         backgroundColor = Color.White,
         shape = RoundedCornerShape(10.dp),
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
     Column(modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center)
@@ -73,7 +77,7 @@ fun PostItem(it:Blog){
             CircularImage(
                 50.0,
                 50.0,
-                20.0,
+                25.0,
                 it.owner.picture
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -86,7 +90,8 @@ fun PostItem(it:Blog){
                 .fillMaxWidth()
                 .height(300.dp),
             painter = rememberImagePainter(data = it.image), contentDescription = null,
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+
         )
         Text(
             text = it.text,

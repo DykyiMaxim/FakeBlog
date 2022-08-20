@@ -5,7 +5,9 @@ import com.example.common.Constant
 import com.example.data.local.BlogDB
 import com.example.data.local.BlogDao
 import com.example.data.network.ApiService
+import com.example.data.repository.GetBlogDetailsRepoImpl
 import com.example.data.repository.GetBlogRepositoryImpl
+import com.example.domain.repository.GetBlogDetailsRepo
 import com.example.domain.repository.GetBlogsRepository
 import dagger.Module
 import dagger.Provides
@@ -53,6 +55,16 @@ object DataModule{
     @Provides
     fun provideDAO(blogDB: BlogDB):BlogDao{
         return blogDB.getBlogDAO()
+    }
+
+    @Provides
+    fun provideGetPagerRepo(apiService: ApiService):GetBlogDetailsRepo{
+        return GetBlogDetailsRepoImpl(apiService)
+    }
+
+    @Provides
+    fun provideGetBlogDetailsRepo(apiService: ApiService): GetBlogDetailsRepo {
+        return GetBlogDetailsRepoImpl(apiService)
     }
 
 

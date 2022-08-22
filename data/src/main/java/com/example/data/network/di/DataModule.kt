@@ -7,8 +7,10 @@ import com.example.data.local.BlogDao
 import com.example.data.network.ApiService
 import com.example.data.repository.GetBlogDetailsRepoImpl
 import com.example.data.repository.GetBlogRepositoryImpl
+import com.example.data.repository.GetPageBlogsRepo
 import com.example.domain.repository.GetBlogDetailsRepo
 import com.example.domain.repository.GetBlogsRepository
+import com.example.domain.repository.GetPageRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,8 +60,8 @@ object DataModule{
     }
 
     @Provides
-    fun provideGetPagerRepo(apiService: ApiService):GetBlogDetailsRepo{
-        return GetBlogDetailsRepoImpl(apiService)
+    fun provideGetPagerRepo(apiService: ApiService):GetPageRepo{
+        return GetPageBlogsRepo(apiService)
     }
 
     @Provides

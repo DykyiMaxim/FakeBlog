@@ -9,12 +9,13 @@ import com.example.data.local.BlogDBkey
 import com.example.data.local.BlogDao
 import com.example.data.repository.GetPageBlogsRepo
 import com.example.domain.models.Blog
+import com.example.domain.repository.GetPageRepo
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class BlogRemoteMediator @Inject constructor(
     private val initialPage: Int = 1,
-    private val getPagerBlogsRepo: GetPageBlogsRepo,
+    private val getPagerRepo: GetPageRepo,
     private val blogDAO:BlogDao
 ) : RemoteMediator<Int, Blog>() {
 
@@ -38,7 +39,7 @@ class BlogRemoteMediator @Inject constructor(
             }
 
             val response =
-                getPagerBlogsRepo.getPageBlog(page = page, limit = state.config.pageSize)
+                getPagerRepo.getPageBlog(page = page, limit = state.config.pageSize)
             val endOfPagination = response.data?.size!! < state.config.pageSize
 
             when (response) {

@@ -21,7 +21,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberImagePainter
 import com.example.domain.models.Blog
 
@@ -31,46 +33,37 @@ fun HomeScreen(
     viewModel: HomeViewModel= hiltViewModel()
 ){
 
-    val homeState = viewModel.BlogsState.value
 
-    if(homeState.isLoading)
-    {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(color = Color.Cyan)
-            
-        }
-    }
-    if(homeState.error.isNotBlank()){
-        Box(modifier = Modifier.fillMaxSize()){
-            Text(
-                text = homeState.error,
-                modifier = Modifier.align(Alignment.Center))
-        }
-    }
-    LazyColumn(Modifier.background(Color.LightGray)){
-        homeState.data?.let{
-            items(it){
-                PostItem(it)
+    val list = viewModel.pager.collectAsLazyPagingItems()
+
+    LazyColumn(modifier = Modifier.background(Color.White)) {
+        items(list.itemCount) {
+            PostItem(it = list[it]!!) {
+                navController.navigate("details/${it}")
             }
         }
+
     }
+
 }
 
 @Composable
-fun PostItem(it:Blog){
+fun PostItem(it:Blog, I:(String)->Unit){
     Card(
-        backgroundColor = Color.White,
+        backgroundColor = Color.LightGray,
         shape = RoundedCornerShape(10.dp),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(12.dp)
     ) {
-    Column(modifier = Modifier.fillMaxWidth(),
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .clickable { I.invoke(it.id) }
+        ,
         verticalArrangement = Arrangement.Center)
     {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         )
         {
@@ -96,7 +89,7 @@ fun PostItem(it:Blog){
         Text(
             text = it.text,
             modifier = Modifier.padding(12.dp),
-            style = TextStyle(color = Color.Gray, fontSize = 20.sp)
+            style = TextStyle(color = Color.Black, fontSize = 20.sp)
         )
         Divider()
     }

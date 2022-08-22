@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FakeBlog</string>
+    <string name="emoji">&#128153;</string>
+
 </resources>

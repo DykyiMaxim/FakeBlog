@@ -1,0 +1,48 @@
+package com.example.fakeblog.presentation.Details
+
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.common.Resource
+import com.example.domain.use_cases.GetBlogDetailsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
+    private val getBlogDetailsUseCase: GetBlogDetailsUseCase,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+
+    val details = mutableStateOf(BlogDetailsState())
+
+    init {
+        savedStateHandle.getLiveData<String>("blogId").value?.let {
+            getBlogDetails(it)
+        }
+    }
+
+    fun getBlogDetails(id: String) {
+        getBlogDetailsUseCase(id).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    details.value = BlogDetailsState(isLoading = true)
+                }
+                is Resource.Success -> {
+                    details.value = BlogDetailsState(data = it.data)
+                }
+                is Resource.Error -> {
+                    details.value = BlogDetailsState(error = it.message.toString())
+                }
+            }
+
+
+        }.launchIn(viewModelScope)
+    }
+
+
+}

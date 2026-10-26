@@ -1,4 +1,20 @@
 # FakeBlog
-A simple Clean architecture MVVM pet project that get weather information from RestApi  and make weather forecast from device current location. In this app I use default Android Location service and ask for permission to get coordinates, make few requests by Retrofit 2.
 
-For DI i chose Dagger Hilt to inject some dependencies to ViewModel. For UI, I chose Jatpack Compose and try my best to following the best practices of Clean architecture and keep SOLID principles as well.
+A blog feed app built to practise offline-first paging and a strict Clean Architecture split.
+
+Posts come from [DummyAPI](https://dummyapi.io). The feed pages through them with Paging 3 and a `RemoteMediator` that caches every page in Room, so the list keeps working without a network connection. Tapping a post opens its details.
+
+## Architecture
+
+The project is split into Gradle modules by layer:
+
+- `domain`: models, repository interfaces and use cases (`GetBlogsUseCase`, `GetBlogDetailsUseCase`)
+- `data`: Retrofit API, Room database, DTO mappers, `BlogRemoteMediator` and repository implementations
+- `app`: Jetpack Compose UI and ViewModels (MVVM)
+- `common`: shared helpers
+
+Dependencies are wired with Hilt.
+
+## Stack
+
+Kotlin, Jetpack Compose, Paging 3, Room, Retrofit, Coroutines, Hilt, Navigation
